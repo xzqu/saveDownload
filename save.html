@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<!--
+	Aerial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+	<title>存档</title>
+	<meta charset="utf-8" />
+	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name='robots' content='index,follow'>
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<noscript>
+		<link rel="stylesheet" href="assets/css/noscript.css" />
+	</noscript>
+</head>
+<style>
+	#game {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.game {
+		border: 1px solid #ccc;
+		border-radius: 10px;
+		padding: 1vw;
+		margin: 1vw;
+	}
+</style>
+
+<body class="is-preload">
+	<div id="wrapper">
+		<div id="bg"></div>
+		<div id="overlay"></div>
+		<div id="main">
+
+			<!-- Header -->
+			<header id="header">
+				<h1>存档下载</h1>
+				<p>&nbsp;&bull;&nbsp; 一些个人整理的存档 &nbsp;&bull;&nbsp;</p>
+				<div id="game">
+
+				</div>
+			</header>
+
+			<!-- Footer -->
+			<!-- <footer id="footer">
+				<span class="copyright">&copy; 2022 <a href="http://www.nange.cn/" target="_blank">楠格</a>丨<a
+						href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow">京ICP备1000000号-1</a></span>
+			</footer> -->
+
+		</div>
+	</div>
+	<script>
+		postXhr('https://node.xzmon.link/api/savefile/find_all', 'POST');
+		window.onload = function () { document.body.classList.remove('is-preload'); }
+		window.ontouchmove = function () { return false; }
+		window.onorientationchange = function () { document.body.scrollTop = 0; }
+		function postXhr(url, fun, data) {
+			var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+
+			xhr.open(fun, url, true);
+			xhr.setRequestHeader("Content-Type", "application/json");
+
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === 4) {
+					if (xhr.status === 200) {
+						let arr = JSON.parse(xhr.responseText);
+						// console.log(arr.data);
+						var ul = document.getElementById('game');
+						// console.log(ul);
+						for (let i = 0; i < arr.data.length; i++) {
+							let li = document.createElement('div');
+							let a = document.createElement('a');
+							a.classList.add('game');
+							a.textContent = arr.data[i].name;
+							a.href = arr.data[i].url;
+							a.target = '_blank';
+							a.title = arr.data[i].name;
+							a.style.border = '1px solid #ccc'
+							a.style.display = 'block'
+							li.appendChild(a);
+							ul.appendChild(li);
+						}
+						// 在这里处理响应数据
+					} else {
+						// console.error("请求失败，状态码：" + xhr.status);
+						// 在这里处理请求失败的情况
+					}
+				}
+			};
+			xhr.send(JSON.stringify(data));
+
+		}
+	</script>
+
+</body>
+
+</html>
